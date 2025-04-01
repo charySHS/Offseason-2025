@@ -1,16 +1,15 @@
 package frc.robot.poses.java;
 
-public enum EClimberPose {
-    Stowed(0.25),
-    Intake(-0.282),
-    Score(-0.05),
-    L4(0.15),
-    L3(0.088),
-    L2(0.078),
-    L1(0),
-    AlgaeLow(0.15),
-    AlgaeHigh(0.15),
-    ClimbReady(-0.195);
+public enum EClimberPose
+{
+    // Starting configuration just stowed out of the way
+    Stowed(0),
+    // Out for alignment before grabbing
+    Align(0.17),
+    // Rotated in for a completed climb
+    Climb(-0.22),
+    ForwardLimit(0.25),
+    ReverseLimit(-0.25);
 
     public final double Rotations;
 

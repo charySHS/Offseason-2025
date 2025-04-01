@@ -1,6 +1,7 @@
 package frc.robot.poses.java;
 
-public enum EElevatorPose {
+public enum EElevatorPose
+{
     Stowed(0),
     IntakeReady(9),
     IntakeGrab(7.25),

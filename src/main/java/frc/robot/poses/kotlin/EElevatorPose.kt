@@ -7,7 +7,8 @@ package frc.robot.poses.kotlin
  * @property rotation The position of the elevator in rotations.
  */
 
-enum class EElevatorPose(@JvmField var rotation: Double) {
+enum class EElevatorPose (@JvmField var rotation: Double)
+{
     /** Represents Stowed position of the elevator */
     Stowed(0.0),
 
