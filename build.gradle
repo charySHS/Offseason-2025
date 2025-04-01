@@ -1,3 +1,12 @@
+buildscript {
+    ext.kotlin_version = '2.1.0'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
 plugins {
     id "java"
     id "com.peterabeles.gversion" version "1.10"
@@ -6,8 +15,6 @@ plugins {
 }
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
 }
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
@@ -70,6 +77,7 @@ task(replayWatch, type: JavaExec) {
 
 repositories {
     maven {url 'https://jitpack.io'}
+    mavenCentral()
 }
 
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
@@ -104,6 +112,7 @@ dependencies {
 
     def akitJson = new groovy.json.JsonSlurper().parseText(new File(projectDir.getAbsolutePath() + "/vendordeps/AdvantageKit.json").text)
     annotationProcessor "org.littletonrobotics.akit:akit-autolog:$akitJson.version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 
 test {
@@ -151,6 +160,7 @@ gversion {
 }
 
 apply plugin: 'groovy'
+apply plugin: 'kotlin'
 spotless {
 	enforceCheck false
 
@@ -194,4 +204,7 @@ spotless {
 		trimTrailingWhitespace()
 		endWithNewline()
 	}
+}
+kotlin {
+    jvmToolchain(17)
 }
