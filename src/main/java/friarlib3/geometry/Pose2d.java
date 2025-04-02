@@ -242,4 +242,35 @@ public class Pose2d implements IPose2d<Pose2d>
 
         return transformBy(Pose2d.exp(twist.scaled(x)));
     }
+
+    @Override
+    public String toString()
+    {
+        return "Translation: " + translation.toString() + ", Rotation: " + rotation.toString();
+    }
+
+    @Override
+    public String toCSV()
+    {
+        return translation.toCSV() + ", " + rotation.toCSV();
+    }
+
+    @Override
+    public double distance(final Pose2d other)
+    {
+        return Pose2d.log(inverse().transformBy(other)).norm();
+    }
+
+    @Override
+    public boolean equals(final Object other){
+        if (!(other instanceof Pose2d)) { return false; }
+
+        return epsilonEquals((Pose2d)other, Util.kEpsilon);
+    }
+
+    @Override
+    public Pose2d getPose() { return this; }
+
+    @Override
+    public Pose2d mirror()
 }
