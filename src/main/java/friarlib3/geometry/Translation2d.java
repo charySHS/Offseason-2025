@@ -97,6 +97,88 @@ public class Translation2d implements ITranslation2d<Translation2d>
      * We can also rotate Translation2d's.
      *
      * @param rotation The rotation to apply.
-     *
+     * @return This translation rotated by rotation.
      */
+    public Translation2d rotateBy(final Rotation2d rotation)
+    {
+        return new  Translation2d(x * rotation.cos() - y * rotation.sin(), x * rotation.sin() + y * rotation.cos());
+    }
+
+    public Rotation2d direction() { return new Rotation2d(x, y, true); }
+
+    /**
+     * The inverse simply means a Translation2d that "undoes" this object.
+     *
+     * @return Translation by -x and -y.
+     */
+    public Translation2d inverse() { return new Translation2d(-x, -y); }
+
+    @Override
+    public Translation2d interpolate(final Translation2d other, double x) {
+        if (x <= 0) { return new Translation2d(this); }
+        else if (x >= 1) { return new Translation2d(other); }
+
+        return extrapolate(other, x);
+    }
+
+    public Translation2d extrapolate(final Translation2d other, double x)
+    {
+        return new Translation2d(x * (other.x - this.x) + this.x, x * (other.y - this.y) + this.y);
+    }
+
+    public Translation2d scale(double s) { return new Translation2d(this.x * s, this.y * s); }
+
+    public Translation2d mirrorAboutX(double xValue) { return new Translation2d(xValue + (xValue - this.x), this.y); }
+
+    public Translation2d mirrorAboutY(double yValue) { return new Translation2d(this.x, yValue + (yValue - this.y)); }
+
+    public boolean epsilonEquals(final Translation2d other, double epsilon)
+    {
+        return Util.epsilonEquals(x(), other.x(), epsilon) && Util.epsilonEquals(y(), other.y(), epsilon);
+    }
+
+    @Override
+    public String toString() {
+        final DecimalFormat format = new DecimalFormat("#0.000");
+
+        return "(" + format.format(this.x) + ", " + format.format(this.y) + ")";
+    }
+
+    @Override
+    public String toCSV()
+    {
+        final DecimalFormat format = new DecimalFormat("#0.000");
+
+        return format.format(this.x) + ", " + format.format(this.y);
+    }
+
+    public static double dot(final Translation2d a, final Translation2d b) { return a.x * b.x + a.y * b.y; }
+
+    public static Rotation2d getAngle(final Translation2d a, final Translation2d b)
+    {
+        double cosAngle = dot(a, b) / (a.norm() * b.norm());
+
+        return (Double.isNaN(cosAngle)) ?
+                new Rotation2d() :
+                Rotation2d.fromDegrees(Math.acos(Util.limit(cosAngle, 1.0)));
+    }
+
+    public static double cross(final Translation2d a, final Translation2d b) { return a.x * b.y - a.y * b.x; }
+
+    @Override
+    public double distance(final Translation2d other) { return inverse().translateBy(other).norm(); }
+
+    @Override
+    public Translation2d add(Translation2d other) { return this.translateBy(other); }
+
+    @Override
+    public boolean equals(final Object other)
+    {
+        return (!(other instanceof Translation2d)) ?
+                false :
+                distance((Translation2d) other) < Util.kEpsilon;
+    }
+
+    @Override
+    public Translation2d getTranslation() { return this; }
 }

@@ -128,7 +128,7 @@ public class Pose2d implements IPose2d<Pose2d>
      * @return This transform * other
      */
     @Override
-    public Pose2d TransformBy(final Pose2d other)
+    public Pose2d transformBy(final Pose2d other)
     {
         return new Pose2d(translation.translateBy(other.translation.rotateBy(rotation)),
                 rotation.rotateBy(other.rotation));
@@ -224,7 +224,7 @@ public class Pose2d implements IPose2d<Pose2d>
         final double t = ((aT.x() - bT.x()) * tanB + bT.y() - aT.y())
                 / (aR.sin() - aR.cos() * tanB);
 
-        if (Double.isNan(t)) { return new Translation2d(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY); }
+        if (Double.isNaN(t)) { return new Translation2d(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY); }
 
         return aT.translateBy(aR.toTranslation().scale(t));
     }
